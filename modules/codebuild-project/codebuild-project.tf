@@ -45,7 +45,7 @@ data "aws_arn" "secrets_manager_read_write" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  role   = aws_iam_role.this.name
+  role       = aws_iam_role.this.name
   policy_arn = data.aws_arn.secrets_manager_read_write.arn
 }
 
