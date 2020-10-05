@@ -1,0 +1,43 @@
+---
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Installing Packer from HashiCorp...!!!"
+      - curl -qL -o packer.zip https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip && unzip packer.zip
+      - echo "Installing jq..."
+      - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
+      - echo "Validating MCD-RHEL7 Packer Template"
+      - ./packer validate packer.json
+  build:
+    commands:
+      ### HashiCorp Packer cannot currently obtain the AWS CodeBuild-assigned role and its credentials
+      ### Manually capture and configure the AWS CLI to provide HashiCorp Packer with AWS credentials
+      ### More info here: https://github.com/mitchellh/packer/issues/4279
+      - echo "Configuring AWS credentials"
+      - curl -qL -o aws_credentials.json http://169.254.170.2/$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI > aws_credentials.json
+      - aws configure set region $AWS_REGION
+      - aws configure set aws_access_key_id `./jq -r '.AccessKeyId' aws_credentials.json`
+      - aws configure set aws_secret_access_key `./jq -r '.SecretAccessKey' aws_credentials.json`
+      - aws configure set aws_session_token `./jq -r '.Token' aws_credentials.json`
+      - echo "Authenticate to Amazon ECR"
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 020246436457.dkr.ecr.us-east-1.amazonaws.com
+      - echo "Building HashiCorp Packer template, packer.json"
+      - ./packer build -only=aws-us-east-1 packer.json
+      - echo "Copying scan results to s3 bucket"
+      - export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - export NOW=$(date +"%m-%d-%y-%H%M")
+      - export S3_BUCKET=golden-image-pipeline-outputs-$AWS_ACCOUNT_ID
+      - if aws s3 ls | grep -w "$S3_BUCKET"; then echo "Bucket exists"; else aws s3 mb s3://$S3_BUCKET; fi
+      - cp ./xccdf-results.xml ./xccdf-results-${NOW}
+      - aws s3 cp xccdf-results-${NOW} s3://$S3_BUCKET
+      - aws s3 cp manifest.json s3://$S3_BUCKET
+      - echo "Capturing AMI_ID for us-east-1"
+      - export AMI_ID_USEAST1=$(cat manifest.json | jq -r .builds[0].artifact_id |  cut -d':' -f2)
+      - echo $AMI_ID_USEAST1
+      - echo "Sharing the us-east-1 AMI with Eric/Bala at $SHARE_ACCOUNT"
+      - aws ec2 modify-image-attribute --image-id $AMI_ID_USEAST1 --launch-permission "Add=[{UserId=$SHARE_ACCOUNT}]" --region us-east-1
+  post_build:
+    commands:
+      - echo "HashiCorp Packer build completed on `date`"

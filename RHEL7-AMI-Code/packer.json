@@ -1,0 +1,229 @@
+{
+    "variables": {
+        "aws_region": "{{ env `AWS_REGION` }}",
+        "ami_name": "RHEL7-GOLDENAMI-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}",
+        "instance_type": "t2.small", 
+        "ssh_username": "ec2-user",
+        "vpc_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_east_1_id` }}",
+        "subnet_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `subnet_east_1_id` }}",
+        "vpc_east_2_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_east_2_id` }}",
+        "subnet_east_2_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `subnet_east_2_id` }}",
+		"vpc_gov_west_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_gov_west_1_id` }}",
+		"subnet_gov_west_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `subnet_gov_west_1_id` }}",
+		"vpc_gov_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_gov_east_1_id` }}",
+		"subnet_gov_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `subnet_gov_east_1_id` }}",
+		"access_key_aws_gov": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `access_key_aws_gov` }}",
+		"secret_key_aws_gov": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `secret_key_aws_gov` }}",
+		"az_client_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `az_client_id` }}",
+		"az_client_secret": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `az_client_secret` }}",
+		"az_subscription_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `az_subscription_id` }}",
+		"az_tenant_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `az_tenant_id` }}",
+		"ecr_repository": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `ecr_repository` }}"
+    },
+
+    "builders": [
+    {
+        "type": "amazon-ebs",
+        "name": "aws-us-east-1",
+        "region": "us-east-1",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ami_name": "{{ user `ami_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_east_1_id` }}",
+        "subnet_id": "{{ user `subnet_east_1_id` }}",
+        "associate_public_ip_address": "true",
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "RHEL-7*",
+                "root-device-type": "ebs"
+            },
+            "owners": [309956199498],
+            "most_recent": true
+        },
+        "tags": {
+            "Name": "Base MCD RHEL7 Golden AMI (us-east-1)",
+            "BuiltBy": "Packer"
+        }
+    },
+    
+	{
+        "type": "amazon-ebs",
+        "name": "aws-us-east-2",
+        "region": "us-east-2",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ami_name": "{{ user `ami_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_east_2_id` }}",
+        "subnet_id": "{{ user `subnet_east_2_id` }}",
+        "associate_public_ip_address": "true",
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "RHEL-7*",
+                "root-device-type": "ebs"
+            },
+            "owners": [309956199498],
+            "most_recent": true
+        },
+        "tags": {
+            "Name": "Base MCD RHEL7 Golden AMI (us-east-2)",
+            "BuiltBy": "Packer"
+        }
+    },
+	
+	{
+        "type": "amazon-ebs",
+        "name": "aws-us-gov-west-1",
+		"access_key": "{{ user `access_key_aws_gov` }}",
+		"secret_key": "{{ user `secret_key_aws_gov` }}",
+        "region": "us-gov-west-1",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ami_name": "{{ user `ami_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_gov_west_1_id` }}",
+        "subnet_id": "{{ user `subnet_gov_west_1_id` }}",
+        "associate_public_ip_address": "true",
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "RHEL-7*",
+                "root-device-type": "ebs"
+            },
+            "owners": [219670896067],
+            "most_recent": true
+        },
+        "tags": {
+            "Name": "Base MCD RHEL7 Golden AMI (us-gov-west-1)",
+            "BuiltBy": "Packer"
+        }
+    },
+	
+	{
+        "type": "amazon-ebs",
+        "name": "aws-us-gov-east-1",
+		"access_key": "{{ user `access_key_aws_gov` }}",
+		"secret_key": "{{ user `secret_key_aws_gov` }}",
+        "region": "us-gov-east-1",
+        "instance_type": "t3a.small",
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ami_name": "{{ user `ami_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_gov_east_1_id` }}",
+        "subnet_id": "{{ user `subnet_gov_east_1_id` }}",
+        "associate_public_ip_address": "true",
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "RHEL-7*",
+                "root-device-type": "ebs"
+            },
+            "owners": [219670896067],
+            "most_recent": true
+        },
+        "tags": {
+            "Name": "Base MCD RHEL7 Golden AMI (us-gov-east-1)",
+            "BuiltBy": "Packer"
+        }
+    },
+	
+	{
+		"type": "azure-arm",
+
+		"client_id": "{{ user `az_client_id` }}",
+		"client_secret": "{{ user `az_client_secret` }}",
+		"subscription_id": "{{ user `az_subscription_id` }}",
+		"tenant_id": "{{ user `az_tenant_id` }}",
+
+		"managed_image_name": "{{ user `ami_name` }}",
+		"managed_image_resource_group_name": "goldenAMI-RHEL7",
+
+		"os_type": "Linux",
+		"image_publisher": "RedHat",
+		"image_offer": "RHEL",
+		"image_sku": "7.8",
+
+		"azure_tags": {
+			"Name": "Base MCD RHEL7 Golden AMI (Azure)",
+			"BuiltBy": "Packer"
+		},
+
+		"location": "eastus",
+		"vm_size": "Standard_B2s"
+	}
+	
+	],
+
+    "description": "MCD RHEL7 Golden Image",
+
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "files/banner.txt",
+            "destination": "$HOME/banner.txt"
+        },
+
+		{
+			"type": "shell",
+			"inline": [
+                "sudo yum update -y",
+                "sudo cp /etc/issue /etc/issue.orig",
+                "sudo cp /etc/motd /etc/motd.orig",
+                "sudo cp $HOME/banner.txt /etc/issue",
+                "sudo cp $HOME/banner.txt /etc/motd",
+                "sudo mkdir $HOME/scan-stig",
+                "sudo chown $USER:$USER $HOME/scan-stig"
+            ]
+		},
+		
+		{
+            "type": "file",
+            "source": "files/STIG-XML/U_RHEL_7_V3R0-4_STIG_SCAP_1-2_Benchmark.xml",
+            "destination": "$HOME/scan-stig/"
+        },
+        
+		{
+			"type": "shell",
+			"script": "scripts/install-scan-tools.sh"
+		},
+        
+        {
+            "type": "shell",
+            "script": "scripts/hardenscript.sh"
+        },
+        
+        {
+            "type": "shell",
+            "script": "scripts/perform-oscap-scan.sh"
+        },
+        
+        {
+            "type": "file",
+            "source": "xccdf-results.xml",
+            "destination": "./xccdf-results.xml",
+            "direction": "download",
+            "only": ["aws-us-east-1"]
+        }
+
+    ],
+    
+    "post-processors": [
+        [
+            {
+                "output": "manifest.json",
+                "strip_path": true,
+                "type": "manifest",
+                "only": ["aws-us-east-1"]
+            }
+        ]
+    ]
+    
+
+}
