@@ -7,13 +7,14 @@
 		"secret_key": "{{ user `secret_key_aws_gov` }}",
         "region": "us-gov-west-1",
         "instance_type": "{{ user `instance_type` }}",
-        "ssh_username": "{{ user `ssh_username` }}",
-        "ami_name": "{{ user `ami_rhel_7_image_name` }}",
+        "ssh_username": "{{ user `ssh_username` }}", 
+        "ami_name": "{{ user `rhel_7_image_name` }}",
         "force_deregister": "true",
         "force_delete_snapshot": "true",
         "vpc_id": "{{ user `vpc_gov_west_1_id` }}",
         "subnet_id": "{{ user `subnet_gov_west_1_id` }}",
         "associate_public_ip_address": "true",
+        "ami_regions": ["us-gov-east-1"],
         "source_ami_filter": {
             "filters": {
                 "virtualization-type": "hvm",
@@ -24,36 +25,7 @@
             "most_recent": true
         },
         "tags": {
-            "Name": "Base RHEL-7 Golden AMI (us-gov-west-1)",
-            "BuiltBy": "Packer"
-        }
-    },
-	
-	{
-        "type": "amazon-ebs",
-        "name": "aws-us-gov-east-1",
-		"access_key": "{{ user `access_key_aws_gov` }}",
-		"secret_key": "{{ user `secret_key_aws_gov` }}",
-        "region": "us-gov-east-1",
-        "instance_type": "t3a.small",
-        "ssh_username": "{{ user `ssh_username` }}",
-        "ami_name": "{{ user `rhel_7_image_name` }}",
-        "force_deregister": "true",
-        "force_delete_snapshot": "true",
-        "vpc_id": "{{ user `vpc_gov_east_1_id` }}",
-        "subnet_id": "{{ user `subnet_gov_east_1_id` }}",
-        "associate_public_ip_address": "true",
-        "source_ami_filter": {
-            "filters": {
-                "virtualization-type": "hvm",
-                "name": "RHEL-7*",
-                "root-device-type": "ebs"
-            },
-            "owners": [219670896067],
-            "most_recent": true
-        },
-        "tags": {
-            "Name": "Base RHEL-7 Golden AMI (us-gov-east-1)",
+            "Name": "Base RHEL-7 Golden AMI (us-gov-accts)",
             "BuiltBy": "Packer"
         }
     },
@@ -75,7 +47,7 @@
 		"image_sku": "7.8",
 
 		"azure_tags": {
-			"Name": "Base MCD RHEL7 Golden Image (Azure)",
+			"Name": "Base RHEL-7 Golden Image (Azure)",
 			"BuiltBy": "Packer"
 		},
 
@@ -109,21 +81,17 @@
 			"type": "shell",
 			"script": "scripts/os-patch.sh"
 		}
-        
-
-
     ],
     
     "post-processors": [
         [
             {
-                "output": "{{user `rhel_7_image_name` }}-manifest.json",
+                "output": "{{ user `rhel_7_image_name` }}-manifest.json",
                 "strip_path": true,
                 "type": "manifest",
-                "only": ["aws-us-gov-east-1"]
+                "only": ["aws-us-gov-west-1"]
             }
         ]
     ]
     
-
 }
