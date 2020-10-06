@@ -23,6 +23,7 @@ resource "null_resource" "bootstrap_codecommit" {
       git init; 
       git add .;
       git commit -m "Bootstrap Master";
+      git remote add origin ${local.git_clone_url};
       git remote set-url origin ${local.git_clone_url};
       git push origin master;
     EOF
