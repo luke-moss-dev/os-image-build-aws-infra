@@ -14,7 +14,7 @@ module "codebuild_project" {
 # Populate CodeCommit with initial repository
 locals {
   git_clone_url = module.codebuild_project.git_clone_http
-  code_dir      = "${path.module}/RHEL7-AMI-Code/"
+  code_dir      = "${path.module}/packer/"
 }
 resource "null_resource" "bootstrap_codecommit" {
   provisioner "local-exec" {
@@ -23,7 +23,7 @@ resource "null_resource" "bootstrap_codecommit" {
       git init; 
       git add .;
       git commit -m "Bootstrap Master";
-      git remote add origin ${local.git_clone_url};
+      git remote set-url origin ${local.git_clone_url};
       git push origin master;
     EOF
   }
