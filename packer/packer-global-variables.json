@@ -2,7 +2,9 @@
     {
         "aws_region": "{{ env `AWS_REGION` }}",
         "instance_type": "t2.small", 
-        "ssh_username": "ec2-user",
+        "centos_ssh_username": "centos",
+        "rhel_ssh_username": "ec2-user",
+        "oracle_ssh_username": "opc",
         "vpc_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_east_1_id` }}",
         "subnet_east_1_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `subnet_east_1_id` }}",
         "vpc_east_2_id": "{{ aws_secretsmanager `packer/pipeline/goldenAMI` `vpc_east_2_id` }}",

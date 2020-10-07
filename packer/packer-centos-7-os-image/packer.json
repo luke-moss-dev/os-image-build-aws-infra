@@ -1,6 +1,61 @@
 {
     "builders": [
 	{
+        "type": "amazon-ebs",
+        "name": "aws-us-gov-west-1",
+		"access_key": "{{ user `access_key_aws_gov` }}",
+		"secret_key": "{{ user `secret_key_aws_gov` }}",
+        "region": "us-gov-west-1",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_username": "{{ user `centos_ssh_username` }}", 
+        "ami_name": "{{ user `centos_7_image_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_gov_west_1_id` }}",
+        "subnet_id": "{{ user `subnet_gov_west_1_id` }}",
+        "associate_public_ip_address": "true",
+        "ami_regions": ["us-gov-east-1"],
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "CentOS Linux 7*",
+                "root-device-type": "ebs"
+            },
+            "owners": [345084742485],
+            "most_recent": true
+        },
+        "tags": {
+            "Name": "Base Centos-7 Golden Image (us-gov-accts)",
+            "BuiltBy": "Packer"
+        }
+    },
+	
+	{
+		"type": "azure-arm",
+
+		"client_id": "{{ user `az_client_id` }}",
+		"client_secret": "{{ user `az_client_secret` }}",
+		"subscription_id": "{{ user `az_subscription_id` }}",
+		"tenant_id": "{{ user `az_tenant_id` }}",
+
+		"managed_image_name": "{{ user `centos_7_image_name` }}",
+		"managed_image_resource_group_name": "Golden-Images",
+
+		"os_type": "Linux",
+		"image_publisher": "OpenLogic",
+		"image_offer": "CentOS",
+		"image_sku": "7.7",
+
+		"azure_tags": {
+			"Name": "Base Centos-7 Golden Image (Azure)",
+			"BuiltBy": "Packer"
+		},
+
+		"location": "eastus",
+		"vm_size": "Standard_B2s"
+	},
+	
+	{
         "type": "oracle-oci",
         "name": "oci-us-east-ashburn",
         "region": "us-ashburn-1",
@@ -13,11 +68,11 @@
         "compartment_ocid": "ocid1.compartment.oc1..aaaaaaaakso6xfmf5irzbc3kdo7ej37lbgpltursjfwlc4nec4xc5u65kgaq",
         "image_name": "{{ user `centos_7_image_name` }}",
         "shape": "VM.Standard.E2.1.Micro",
-        "ssh_username": "opc",
+        "ssh_username": "{{ user `oracle_ssh_username` }}",
         "subnet_ocid": "ocid1.subnet.oc1.iad.aaaaaaaa5ut4nedd2l7gizeyhn3plazpw7o5fbbehecrqa32nsrdbchi6vmq",
 
         "tags": {
-            "Name": "Base Centos-7 Golden AMI (Oracle)",
+            "Name": "Base Centos-7 Golden Image (Oracle)",
             "BuiltBy": "Packer"
         }
     }

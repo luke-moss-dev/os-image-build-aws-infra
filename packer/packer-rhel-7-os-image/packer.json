@@ -7,7 +7,7 @@
 		"secret_key": "{{ user `secret_key_aws_gov` }}",
         "region": "us-gov-west-1",
         "instance_type": "{{ user `instance_type` }}",
-        "ssh_username": "{{ user `ssh_username` }}", 
+        "ssh_username": "{{ user `rhel_ssh_username` }}", 
         "ami_name": "{{ user `rhel_7_image_name` }}",
         "force_deregister": "true",
         "force_delete_snapshot": "true",
@@ -39,7 +39,7 @@
 		"tenant_id": "{{ user `az_tenant_id` }}",
 
 		"managed_image_name": "{{ user `rhel_7_image_name` }}",
-		"managed_image_resource_group_name": "RHEL-7-Golden-Image",
+		"managed_image_resource_group_name": "Golden-Images",
 
 		"os_type": "Linux",
 		"image_publisher": "RedHat",
