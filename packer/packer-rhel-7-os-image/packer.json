@@ -62,7 +62,7 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "files/banner.txt",
+            "source": "../files/banner.txt",
             "destination": "$HOME/banner.txt"
         },
 
@@ -79,7 +79,7 @@
 		
 		{
 			"type": "shell",
-			"script": "scripts/os-patch.sh"
+			"script": "../scripts/os-patch.sh"
 		}
     ],
     
