@@ -2,7 +2,7 @@
     "builders": [
 	{
         "type": "amazon-ebs",
-        "name": "aws-us-gov-west-1",
+        "name": "centos-7-aws-us-gov",
 		"access_key": "{{ user `access_key_aws_gov` }}",
 		"secret_key": "{{ user `secret_key_aws_gov` }}",
         "region": "us-gov-west-1",
@@ -25,14 +25,14 @@
             "most_recent": true
         },
         "tags": {
-            "Name": "Base Centos-7 Golden Image (us-gov-accts)",
+            "Name": "Centos-7 Golden Image (us-gov-accts)",
             "BuiltBy": "Packer"
         }
     },
 	
 	{
 		"type": "azure-arm",
-
+        "name": "centos-7-azure",
 		"client_id": "{{ user `az_client_id` }}",
 		"client_secret": "{{ user `az_client_secret` }}",
 		"subscription_id": "{{ user `az_subscription_id` }}",
@@ -47,7 +47,7 @@
 		"image_sku": "7.7",
 
 		"azure_tags": {
-			"Name": "Base Centos-7 Golden Image (Azure)",
+			"Name": "Centos-7 Golden Image (Azure)",
 			"BuiltBy": "Packer"
 		},
 
@@ -57,7 +57,7 @@
 	
 	{
         "type": "oracle-oci",
-        "name": "oci-us-east-ashburn",
+        "name": "centos-7-oci-us-east-ashburn",
         "region": "us-ashburn-1",
 		"availability_domain": "AGbC:US-ASHBURN-AD-1",
 		"user_ocid": "ocid1.user.oc1..aaaaaaaa4c2kab6sefz3rclu64drfprjekuv6kbk7ebu4dkcm2h2fbx6ipda",
@@ -72,13 +72,13 @@
         "subnet_ocid": "ocid1.subnet.oc1.iad.aaaaaaaa5ut4nedd2l7gizeyhn3plazpw7o5fbbehecrqa32nsrdbchi6vmq",
 
         "tags": {
-            "Name": "Base Centos-7 Golden Image (Oracle)",
+            "Name": "Centos-7 Golden Image (Oracle)",
             "BuiltBy": "Packer"
         }
     }
 	],
 
-    "description": "Base Centos-7 Golden Image",
+    "description": "Centos-7 Golden Image",
 
     "provisioners": [
         {
@@ -110,7 +110,7 @@
                 "output": "{{ user `centos_7_image_name` }}-manifest.json",
                 "strip_path": true,
                 "type": "manifest",
-                "only": ["oci-us-east-ashburn"]
+                "only": ["centos-7-oci-us-east-ashburn"]
             }
         ]
     ]

@@ -2,7 +2,7 @@
     "builders": [
 	{
         "type": "amazon-ebs",
-        "name": "aws-us-gov-west-1",
+        "name": "rhel-7-aws-us-gov",
 		"access_key": "{{ user `access_key_aws_gov` }}",
 		"secret_key": "{{ user `secret_key_aws_gov` }}",
         "region": "us-gov-west-1",
@@ -25,14 +25,14 @@
             "most_recent": true
         },
         "tags": {
-            "Name": "Base RHEL-7 Golden AMI (us-gov-accts)",
+            "Name": "RHEL-7 Golden Image (us-gov-accts)",
             "BuiltBy": "Packer"
         }
     },
 	
 	{
 		"type": "azure-arm",
-
+        "name": "rhel-7-azure",
 		"client_id": "{{ user `az_client_id` }}",
 		"client_secret": "{{ user `az_client_secret` }}",
 		"subscription_id": "{{ user `az_subscription_id` }}",
@@ -47,7 +47,7 @@
 		"image_sku": "7.8",
 
 		"azure_tags": {
-			"Name": "Base RHEL-7 Golden Image (Azure)",
+			"Name": "RHEL-7 Golden Image (Azure)",
 			"BuiltBy": "Packer"
 		},
 
@@ -57,7 +57,7 @@
 	
 	],
 
-    "description": "Base RHEL-7 Golden Image",
+    "description": "RHEL-7 Golden Image",
 
     "provisioners": [
         {
@@ -89,7 +89,7 @@
                 "output": "{{ user `rhel_7_image_name` }}-manifest.json",
                 "strip_path": true,
                 "type": "manifest",
-                "only": ["aws-us-gov-west-1"]
+                "only": ["rhel-7-aws-us-gov"]
             }
         ]
     ]
