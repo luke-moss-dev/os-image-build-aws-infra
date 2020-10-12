@@ -35,6 +35,4 @@ resource "null_resource" "bootstrap_codecommit" {
 # Secrets Manager
 module "secrets-manager" {
   source = "./modules/secrets-manager"
-  
-  aws_secrets_manager_name = var.codebuild_name
 }
