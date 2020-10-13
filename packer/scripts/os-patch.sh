@@ -6,7 +6,7 @@
 set -e
 
 sudo -s << EOF
-    if zypper -n refresh; then zypper -n update;
+    if zypper -n refresh; then zypper ar http://download.opensuse.org/update/11.1/ update && zypper -n update;
     else yum update -y;
     fi
 EOF

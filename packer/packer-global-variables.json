@@ -32,5 +32,5 @@
 		
 		"rhel_7_image_name": "RHEL-7-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}",
 		"centos_7_image_name": "CENTOS-7-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}",
-		"opensuse_tumbleweed_image_name": "OPENSUSE-TUMBLEWEED-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}"
+		"opensuse_leap_image_name": "OPENSUSE-TUMBLEWEED-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}"
     }

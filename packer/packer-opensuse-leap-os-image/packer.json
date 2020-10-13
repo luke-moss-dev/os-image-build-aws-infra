@@ -1,0 +1,81 @@
+{
+    "builders": [
+	{
+        "type": "amazon-ebs",
+        "name": "opensuse-leap-aws-us-gov",
+		"access_key": "{{ user `access_key_aws_gov` }}",
+		"secret_key": "{{ user `secret_key_aws_gov` }}",
+        "region": "us-gov-west-1",
+        "instance_type": "{{ user `instance_type` }}",
+        "ssh_username": "{{ user `rhel_ssh_username` }}", 
+        "ami_name": "{{ user `opensuse_leap_image_name` }}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "vpc_id": "{{ user `vpc_gov_west_1_id` }}",
+        "subnet_id": "{{ user `subnet_gov_west_1_id` }}",
+        "associate_public_ip_address": "true",
+        "ami_regions": ["us-gov-east-1"],
+        "source_ami": "ami-35330c54",
+        
+        "tags": {
+            "Name": "openSUSE-Leap Golden Image (us-gov-accts)",
+            "BuiltBy": "Packer"
+        }
+    },
+	
+	{
+		"type": "azure-arm",
+        "name": "opensuse-leap-azure",
+		"client_id": "{{ user `az_client_id` }}",
+		"client_secret": "{{ user `az_client_secret` }}",
+		"subscription_id": "{{ user `az_subscription_id` }}",
+		"tenant_id": "{{ user `az_tenant_id` }}",
+
+		"managed_image_name": "{{ user `opensuse_leap_image_name` }}",
+		"managed_image_resource_group_name": "Golden-Images",
+
+		"os_type": "Linux",
+		"image_publisher": "suse",
+		"image_offer": "opensuse-leap",
+		"image_sku": "15-2",
+
+		"azure_tags": {
+			"Name": "openSUSE-Leap Golden Image (Azure)",
+			"BuiltBy": "Packer"
+		},
+
+		"location": "eastus",
+		"vm_size": "Standard_B2s"
+	}
+	
+	],
+
+    "description": "openSUSE-Leap Golden Image",
+
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "../files/banner.txt",
+            "destination": "$HOME/banner.txt"
+        },
+
+		{
+			"type": "shell",
+			"inline": [
+                "sudo cp $HOME/banner.txt /etc/motd"
+            ]
+		}
+    ],
+    
+    "post-processors": [
+        [
+            {
+                "output": "{{ user `opensuse_leap_image_name` }}-manifest.json",
+                "strip_path": true,
+                "type": "manifest",
+                "only": ["opensuse-leap-aws-us-gov"]
+            }
+        ]
+    ]
+    
+}
