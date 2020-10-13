@@ -23,12 +23,12 @@
 		"az_tenant_id": "{{ aws_secretsmanager `packer/golden-image/pipeline` `az_tenant_id` }}",
 		"az_resource_group_name": "{{ aws_secretsmanager `packer/golden-image/pipeline` `az_resource_group_name` }}",
 		
-		"user_ocid": "ocid1.user.oc1..aaaaaaaa4c2kab6sefz3rclu64drfprjekuv6kbk7ebu4dkcm2h2fbx6ipda",
-		"tenancy_ocid": "ocid1.tenancy.oc1..aaaaaaaaaunmj5j63adphxrp2zebz2cbsikp4zcw5nb2dshfyanaprxzm6ba",
-		"base_image_ocid": "ocid1.image.oc1.iad.aaaaaaaahu5qjlssg7gheegnyty5nvuafd6zlwcz2f3oa4flu7dijeqzgt6a",
-		"oci_fingerprint": "c1:78:d5:4f:4e:21:0c:d0:bd:ff:1c:6e:29:a5:19:d9",
-		"compartment_ocid": "ocid1.compartment.oc1..aaaaaaaakso6xfmf5irzbc3kdo7ej37lbgpltursjfwlc4nec4xc5u65kgaq",
-		"subnet_ocid": "ocid1.subnet.oc1.iad.aaaaaaaa5ut4nedd2l7gizeyhn3plazpw7o5fbbehecrqa32nsrdbchi6vmq",
+		"user_ocid": "{{ aws_secretsmanager `packer/golden-image/pipeline` `user_ocid` }}",
+		"tenancy_ocid": "{{ aws_secretsmanager `packer/golden-image/pipeline` `tenancy_ocid` }}",
+		"base_image_ocid": "{{ aws_secretsmanager `packer/golden-image/pipeline` `base_image_ocid` }}",
+		"oci_fingerprint": "{{ aws_secretsmanager `packer/golden-image/pipeline` `oci_fingerprint` }}",
+		"compartment_ocid": "{{ aws_secretsmanager `packer/golden-image/pipeline` `compartment_ocid` }}",
+		"subnet_ocid": "{{ aws_secretsmanager `packer/golden-image/pipeline` `subnet_ocid` }}",
 		
 		"rhel_7_image_name": "RHEL-7-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}",
 		"centos_7_image_name": "CENTOS-7-GOLDEN-{{isotime \"2006-01-02\"}}-{{isotime \"1504\"}}",
