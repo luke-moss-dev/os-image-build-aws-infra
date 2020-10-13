@@ -1,5 +1,34 @@
+terraform {
+  required_version = ">= 0.12.19"
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# PREPARE PROVIDERS
+# ---------------------------------------------------------------------------------------------------------------------
 provider "aws" {
-  region = var.region
+  version = "~> 3.0"
+  region  = var.region
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE A TFSTATE-BACKEND
+# ---------------------------------------------------------------------------------------------------------------------
+module "tfstate-backend" {
+  source  = "cloudposse/tfstate-backend/aws"
+  version = "0.25.0"
+
+  namespace     = var.codebuild_name
+  stage         = var.environment
+  name          = var.codebuild_name
+  force_destroy = true
+
+  attributes = ["terraform", "state"]
+
+  tags = {
+    managed_by  = "Terraform"
+    project     = "OS Image Build"
+    environment = var.environment
+  }
 }
 
 module "codebuild_project" {

@@ -39,7 +39,7 @@
 		"tenant_id": "{{ user `az_tenant_id` }}",
 
 		"managed_image_name": "{{ user `centos_7_image_name` }}",
-		"managed_image_resource_group_name": "Golden-Images",
+		"managed_image_resource_group_name": "{{ user `az_resource_group_name` }}",
 
 		"os_type": "Linux",
 		"image_publisher": "OpenLogic",
@@ -60,16 +60,16 @@
         "name": "centos-7-oci-us-east-ashburn",
         "region": "us-ashburn-1",
 		"availability_domain": "AGbC:US-ASHBURN-AD-1",
-		"user_ocid": "ocid1.user.oc1..aaaaaaaa4c2kab6sefz3rclu64drfprjekuv6kbk7ebu4dkcm2h2fbx6ipda",
-		"tenancy_ocid": "ocid1.tenancy.oc1..aaaaaaaaaunmj5j63adphxrp2zebz2cbsikp4zcw5nb2dshfyanaprxzm6ba",
-        "base_image_ocid": "ocid1.image.oc1.iad.aaaaaaaahu5qjlssg7gheegnyty5nvuafd6zlwcz2f3oa4flu7dijeqzgt6a",
+		"user_ocid": "{{ user `user_ocid` }}",
+		"tenancy_ocid": "{{ user `tenancy_ocid` }}",
+        "base_image_ocid": "{{ user `base_image_ocid` }}",
         "key_file": "./oci_api_key.pem",
-        "fingerprint": "c1:78:d5:4f:4e:21:0c:d0:bd:ff:1c:6e:29:a5:19:d9",
-        "compartment_ocid": "ocid1.compartment.oc1..aaaaaaaakso6xfmf5irzbc3kdo7ej37lbgpltursjfwlc4nec4xc5u65kgaq",
+        "fingerprint": "{{ user `oci_fingerprint` }}",
+        "compartment_ocid": "{{ user `compartment_ocid` }}",
         "image_name": "{{ user `centos_7_image_name` }}",
         "shape": "VM.Standard.E2.1.Micro",
         "ssh_username": "{{ user `oracle_ssh_username` }}",
-        "subnet_ocid": "ocid1.subnet.oc1.iad.aaaaaaaa5ut4nedd2l7gizeyhn3plazpw7o5fbbehecrqa32nsrdbchi6vmq",
+        "subnet_ocid": "{{ user `subnet_ocid` }}",
 
         "tags": {
             "Name": "Centos-7 Golden Image (Oracle)",

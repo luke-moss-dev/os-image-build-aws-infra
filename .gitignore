@@ -1,2 +1,4 @@
 *.pem
 secrets.json
+*.tfstate
+.terraform
